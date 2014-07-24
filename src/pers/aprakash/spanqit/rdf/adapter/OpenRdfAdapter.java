@@ -16,6 +16,15 @@ import pers.aprakash.spanqit.rdf.Value;
  *
  */
 public class OpenRdfAdapter {
+	public static Value value(final org.openrdf.model.Value value) {
+		return new Value() {
+			@Override
+			public String getQueryString() {
+				return queryString(value);
+			}
+		};
+	}
+
 	public static Resource resource(final org.openrdf.model.Resource resource) {
 		return new Resource() {
 			@Override
@@ -34,15 +43,6 @@ public class OpenRdfAdapter {
 		};
 	}
 
-	public static Value value(final org.openrdf.model.Value value) {
-		return new Value() {
-			@Override
-			public String getQueryString() {
-				return queryString(value);
-			}
-		};
-	}
-
 	private static String queryString(org.openrdf.model.Value value) {
 		if (value instanceof Literal) {
 			Literal literal = (Literal) value;
@@ -51,6 +51,8 @@ public class OpenRdfAdapter {
 
 			queryString.append('"').append(literal.getLabel()).append("\"");
 			if (literal.getDatatype() != null) {
+				// probably should add a check for built-in datatypes, and
+				// ignore adding tags for those
 				queryString.append("^^").append(
 						queryString(literal.getDatatype()));
 			}
