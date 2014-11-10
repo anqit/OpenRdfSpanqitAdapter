@@ -2,20 +2,60 @@ package pers.aprakash.spanqit.rdf.adapter;
 
 import org.openrdf.model.BNode;
 import org.openrdf.model.Literal;
+import org.openrdf.model.ValueFactory;
+import org.openrdf.model.impl.ValueFactoryImpl;
 
-import pers.aprakash.spanqit.rdf.Resource;
-import pers.aprakash.spanqit.rdf.IRI;
-import pers.aprakash.spanqit.rdf.Value;
+import com.anqit.spanqit.rdf.IRI;
+import com.anqit.spanqit.rdf.Resource;
+import com.anqit.spanqit.rdf.Value;
 
 /**
- * An adapter class to create Spanqit RDF elements from OpenRdf ones.
+ * An crude example of an adapter class to create Spanqit RDF elements from 
+ * OpenRdf ones.
  * <p>
- * TODO: Move this to a separate project to remove the OpenRdf dependency.
  * 
  * @author Ankit
  *
  */
 public class OpenRdfAdapter {
+	private static ValueFactory vf =  new ValueFactoryImpl();
+	
+	public static IRI iri(String uri) {
+		return OpenRdfAdapter.iri(vf.createURI(uri));
+	}
+	
+	public static IRI iri(String ns, String localName) {
+		return OpenRdfAdapter.iri(vf.createURI(ns, localName));
+	}
+	
+	public static Value blankNode() {
+		return value(vf.createBNode());
+	}
+	
+	public static Value literal(int num) {
+		return value(vf.createLiteral(num));
+	}
+	
+	public static Value literal(double num) {
+		return value(vf.createLiteral(num));
+	}
+	
+	public static Value literal(String label) {
+		return value(vf.createLiteral(label));
+	}
+
+	public static Value literalWithLangTag(String label, String lang) {
+		return value(vf.createLiteral(label, lang));
+	}
+
+	public static Value literalWithDatatype(String label, String datatype) {
+		return value(vf.createLiteral(label, vf.createURI(datatype)));
+	}
+
+	public static Value literalWithDatatype(String label, String ns, String datatype) {
+		return value(vf.createLiteral(label, vf.createURI(ns, datatype)));
+	}
+	
 	public static Value value(final org.openrdf.model.Value value) {
 		return new Value() {
 			@Override
