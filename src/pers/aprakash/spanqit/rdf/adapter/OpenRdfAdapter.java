@@ -5,9 +5,9 @@ import org.openrdf.model.Literal;
 import org.openrdf.model.ValueFactory;
 import org.openrdf.model.impl.ValueFactoryImpl;
 
-import com.anqit.spanqit.rdf.IRI;
-import com.anqit.spanqit.rdf.Resource;
-import com.anqit.spanqit.rdf.Value;
+import com.anqit.spanqit.rdf.Iri;
+import com.anqit.spanqit.rdf.RdfResource;
+import com.anqit.spanqit.rdf.RdfValue;
 
 /**
  * An crude example of an adapter class to create Spanqit RDF elements from 
@@ -20,44 +20,44 @@ import com.anqit.spanqit.rdf.Value;
 public class OpenRdfAdapter {
 	private static ValueFactory vf =  new ValueFactoryImpl();
 	
-	public static IRI iri(String uri) {
+	public static Iri iri(String uri) {
 		return OpenRdfAdapter.iri(vf.createURI(uri));
 	}
 	
-	public static IRI iri(String ns, String localName) {
+	public static Iri iri(String ns, String localName) {
 		return OpenRdfAdapter.iri(vf.createURI(ns, localName));
 	}
 	
-	public static Value blankNode() {
+	public static RdfValue blankNode() {
 		return value(vf.createBNode());
 	}
 	
-	public static Value literal(int num) {
+	public static RdfValue literal(int num) {
 		return value(vf.createLiteral(num));
 	}
 	
-	public static Value literal(double num) {
+	public static RdfValue literal(double num) {
 		return value(vf.createLiteral(num));
 	}
 	
-	public static Value literal(String label) {
+	public static RdfValue literal(String label) {
 		return value(vf.createLiteral(label));
 	}
 
-	public static Value literalWithLangTag(String label, String lang) {
+	public static RdfValue literalWithLangTag(String label, String lang) {
 		return value(vf.createLiteral(label, lang));
 	}
 
-	public static Value literalWithDatatype(String label, String datatype) {
+	public static RdfValue literalWithDatatype(String label, String datatype) {
 		return value(vf.createLiteral(label, vf.createURI(datatype)));
 	}
 
-	public static Value literalWithDatatype(String label, String ns, String datatype) {
+	public static RdfValue literalWithDatatype(String label, String ns, String datatype) {
 		return value(vf.createLiteral(label, vf.createURI(ns, datatype)));
 	}
 	
-	public static Value value(final org.openrdf.model.Value value) {
-		return new Value() {
+	public static RdfValue value(final org.openrdf.model.Value value) {
+		return new RdfValue() {
 			@Override
 			public String getQueryString() {
 				return queryString(value);
@@ -65,8 +65,8 @@ public class OpenRdfAdapter {
 		};
 	}
 
-	public static Resource resource(final org.openrdf.model.Resource resource) {
-		return new Resource() {
+	public static RdfResource resource(final org.openrdf.model.Resource resource) {
+		return new RdfResource() {
 			@Override
 			public String getQueryString() {
 				return queryString(resource);
@@ -74,8 +74,8 @@ public class OpenRdfAdapter {
 		};
 	}
 
-	public static IRI iri(final org.openrdf.model.URI uri) {
-		return new IRI() {
+	public static Iri iri(final org.openrdf.model.URI uri) {
+		return new Iri() {
 			@Override
 			public String getQueryString() {
 				return queryString(uri);
