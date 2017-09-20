@@ -6,81 +6,108 @@ import org.openrdf.model.ValueFactory;
 import org.openrdf.model.impl.ValueFactoryImpl;
 
 import com.anqit.spanqit.rdf.Iri;
+import com.anqit.spanqit.rdf.RdfLiteral;
+import com.anqit.spanqit.rdf.RdfLiteral.StringLiteral;
 import com.anqit.spanqit.rdf.RdfResource;
 import com.anqit.spanqit.rdf.RdfValue;
 
 /**
  * An crude example of an adapter class to create Spanqit RDF elements from 
  * OpenRdf ones.
- * <p>
- * 
- * @author Ankit
- *
  */
 public class OpenRdfAdapter {
 	private static ValueFactory vf =  new ValueFactoryImpl();
 	
+	/**
+	 * create a Spanqit iri from a URI
+	 * 
+	 * @param uri 
+	 * @return a Spanqit Iri instance
+	 */
 	public static Iri iri(String uri) {
-		return OpenRdfAdapter.iri(vf.createURI(uri));
+		return iri(vf.createURI(uri));
 	}
 	
+	/**
+	 * create a Spanqit iri from a namespace and local name
+	 * 
+	 * @param ns the namespace
+	 * @param localName
+	 * 
+	 * @return  a Spanqit Iri instance
+	 */
 	public static Iri iri(String ns, String localName) {
-		return OpenRdfAdapter.iri(vf.createURI(ns, localName));
-	}
-	
-	public static RdfValue blankNode() {
-		return value(vf.createBNode());
-	}
-	
-	public static RdfValue literal(int num) {
-		return value(vf.createLiteral(num));
-	}
-	
-	public static RdfValue literal(double num) {
-		return value(vf.createLiteral(num));
-	}
-	
-	public static RdfValue literal(String label) {
-		return value(vf.createLiteral(label));
+		return iri(vf.createURI(ns, localName));
 	}
 
-	public static RdfValue literalWithLangTag(String label, String lang) {
-		return value(vf.createLiteral(label, lang));
+	/**
+	 * create a literal with a language tag
+	 * 
+	 * @param label the literal string
+	 * @param lang the language tag
+	 * 
+	 * @return a Spanqit StringLiteral
+	 */
+	public static StringLiteral literalWithLangTag(String label, String lang) {
+		return RdfLiteral.of(queryString(vf.createLiteral(label, lang)));
 	}
 
-	public static RdfValue literalWithDatatype(String label, String datatype) {
-		return value(vf.createLiteral(label, vf.createURI(datatype)));
+	/**
+	 * create a literal with a datatype
+	 * 
+	 * @param label the literal string
+	 * @param datatype the datatype tag
+	 * 
+	 * @return a Spanqit StringLiteral
+	 */
+	public static StringLiteral literalWithDatatype(String label, String datatype) {
+		return RdfLiteral.of(queryString(vf.createLiteral(label, vf.createURI(datatype))));
 	}
 
-	public static RdfValue literalWithDatatype(String label, String ns, String datatype) {
-		return value(vf.createLiteral(label, vf.createURI(ns, datatype)));
+	/**
+	 * create a literal with a datatype
+	 * 
+	 * @param label the literal string
+	 * @param ns the namespace of the datatype iri
+	 * @param datatype the local name of the datatype tag
+	 * 
+	 * @return a Spanqit StringLiteral
+	 */
+	public static StringLiteral literalWithDatatype(String label, String ns, String datatype) {
+		return RdfLiteral.of(queryString(vf.createLiteral(label, vf.createURI(ns, datatype))));
 	}
 	
+	/**
+	 * convert an OpenRdf Value into a Spanqit RdfValue
+	 * 
+	 * @param value the OpenRdf Value instance to convert
+	 * 
+	 * @return a Spanqit RdfValue instance
+	 */
 	public static RdfValue value(final org.openrdf.model.Value value) {
-		return new RdfValue() {
-			@Override
-			public String getQueryString() {
-				return queryString(value);
-			}
-		};
+		return () -> queryString(value);
 	}
 
+	/**
+	 * convert an OpenRdf Resource into a Spanqit RdfResource
+	 * 
+	 * @param resource the OpenRdf Resource instance to convert
+	 * 
+	 * @return a Spanqit RdfResource instance
+	 */
 	public static RdfResource resource(final org.openrdf.model.Resource resource) {
-		return new RdfResource() {
-			@Override
-			public String getQueryString() {
-				return queryString(resource);
-			}
-		};
+		return () -> queryString(resource);
 	}
 
+	/**
+	 * convert an OpenRdf URI into a Spanqit Iri
+	 * 
+	 * @param uri the OpenRdf URI instance to convert
+	 * 
+	 * @return a Spanqit Iri instance
+	 */
 	public static Iri iri(final org.openrdf.model.URI uri) {
-		return new Iri() {
-			@Override
-			public String getQueryString() {
-				return queryString(uri);
-			}
-		};
+		return () -> queryString(uri);
 	}
 
 	private static String queryString(org.openrdf.model.Value value) {
