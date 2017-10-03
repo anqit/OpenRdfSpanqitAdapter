@@ -6,8 +6,6 @@ import org.openrdf.model.ValueFactory;
 import org.openrdf.model.impl.ValueFactoryImpl;
 
 import com.anqit.spanqit.rdf.Iri;
-import com.anqit.spanqit.rdf.RdfLiteral;
-import com.anqit.spanqit.rdf.RdfLiteral.StringLiteral;
 import com.anqit.spanqit.rdf.RdfResource;
 import com.anqit.spanqit.rdf.RdfValue;
 
@@ -38,43 +36,6 @@ public class OpenRdfAdapter {
 	 */
 	public static Iri iri(String ns, String localName) {
 		return iri(vf.createURI(ns, localName));
-	}
-
-	/**
-	 * create a literal with a language tag
-	 * 
-	 * @param label the literal string
-	 * @param lang the language tag
-	 * 
-	 * @return a Spanqit StringLiteral
-	 */
-	public static StringLiteral literalWithLangTag(String label, String lang) {
-		return RdfLiteral.of(queryString(vf.createLiteral(label, lang)));
-	}
-
-	/**
-	 * create a literal with a datatype
-	 * 
-	 * @param label the literal string
-	 * @param datatype the datatype tag
-	 * 
-	 * @return a Spanqit StringLiteral
-	 */
-	public static StringLiteral literalWithDatatype(String label, String datatype) {
-		return RdfLiteral.of(queryString(vf.createLiteral(label, vf.createURI(datatype))));
-	}
-
-	/**
-	 * create a literal with a datatype
-	 * 
-	 * @param label the literal string
-	 * @param ns the namespace of the datatype iri
-	 * @param datatype the local name of the datatype tag
-	 * 
-	 * @return a Spanqit StringLiteral
-	 */
-	public static StringLiteral literalWithDatatype(String label, String ns, String datatype) {
-		return RdfLiteral.of(queryString(vf.createLiteral(label, vf.createURI(ns, datatype))));
 	}
 	
 	/**
